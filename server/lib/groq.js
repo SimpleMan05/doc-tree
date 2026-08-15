@@ -21,7 +21,7 @@ function keywordFallback(text) {
     if (words.some((w) => lower.includes(w))) return theme;
   }
   // default bucket if nothing matches
-  return "hope";
+  return THEMES[Math.floor(Math.random() * THEMES.length)];
 }
 
 export async function classifyTheme(text) {
