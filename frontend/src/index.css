@@ -1,0 +1,253 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  overflow-x: hidden;
+}
+
+.app {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  transition: background 0.3s ease;
+}
+.app.dark { background: #0a0e14; color: #f0f0ea; }
+.app.light { background: #f7f4ea; color: #1a1a14; }
+
+.app-header {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  z-index: 10;
+  text-align: center;
+  padding: 1.2rem 1rem 0.4rem;
+  pointer-events: none;
+}
+.app-header h1 {
+  font-size: 1.6rem;
+  background: linear-gradient(90deg, #FF9933, #F5F5F0, #138808);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  letter-spacing: 0.02em;
+}
+.app-header p { font-size: 0.85rem; opacity: 0.7; margin-top: 0.2rem; }
+
+.theme-toggle {
+  position: absolute;
+  top: 1.2rem; right: 1rem;
+  pointer-events: auto;
+  background: rgba(255,255,255,0.1);
+  border: none;
+  border-radius: 999px;
+  width: 36px; height: 36px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.search-bar {
+  position: absolute;
+  top: 5.2rem; left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+}
+.search-bar input {
+  padding: 0.5rem 0.8rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(0,0,0,0.4);
+  color: inherit;
+  width: 160px;
+  font-size: 0.85rem;
+}
+.search-bar button {
+  padding: 0.5rem 0.9rem;
+  border-radius: 8px;
+  border: none;
+  background: #FF9933;
+  color: #1a1a14;
+  font-weight: 600;
+  cursor: pointer;
+}
+.search-error { font-size: 0.75rem; color: #ff6b6b; margin-left: 0.4rem; }
+
+.panel {
+  position: relative;
+  z-index: 10;
+  margin: -3rem auto 1.5rem;
+  max-width: 480px;
+  width: 92%;
+  background: rgba(20, 20, 20, 0.55);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 16px;
+  padding: 1.1rem 1.2rem;
+}
+.app.light .panel { background: rgba(255,255,255,0.7); border-color: rgba(0,0,0,0.08); }
+
+.panel-title { font-weight: 600; margin-bottom: 0.6rem; }
+.panel-sub { font-size: 0.9rem; margin-top: 0.4rem; }
+.panel-hint { font-size: 0.8rem; opacity: 0.7; margin-top: 0.3rem; }
+.leaf-id { font-family: monospace; font-weight: 700; letter-spacing: 0.05em; color: #FF9933; }
+
+.panel textarea {
+  width: 100%;
+  padding: 0.7rem;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(0,0,0,0.3);
+  color: inherit;
+  font-family: inherit;
+  font-size: 0.9rem;
+  resize: none;
+}
+.app.light .panel textarea { background: rgba(0,0,0,0.03); }
+
+.panel-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.6rem;
+}
+.word-count { font-size: 0.75rem; opacity: 0.6; }
+.word-count.over { color: #ff6b6b; }
+
+.panel button[type="submit"] {
+  padding: 0.5rem 1.1rem;
+  border-radius: 8px;
+  border: none;
+  background: linear-gradient(90deg, #FF9933, #138808);
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+.panel button:disabled { opacity: 0.4; cursor: not-allowed; }
+.panel-error { color: #ff6b6b; font-size: 0.8rem; margin-top: 0.5rem; }
+
+.leaf-card {
+  position: absolute;
+  bottom: 8rem; left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  background: rgba(20,20,20,0.7);
+  backdrop-filter: blur(10px);
+  border-radius: 14px;
+  padding: 1rem 1.2rem;
+  max-width: 340px;
+  text-align: center;
+}
+.leaf-card-id { font-family: monospace; color: #FF9933; font-weight: 700; }
+.leaf-card-text { font-style: italic; margin: 0.4rem 0; font-size: 0.9rem; }
+.leaf-card button {
+  margin-top: 0.4rem;
+  background: none;
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 8px;
+  padding: 0.3rem 0.7rem;
+  color: inherit;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.stats-bar {
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+  padding: 0.6rem 1rem 1rem;
+  text-align: center;
+}
+.stats-total { font-size: 0.8rem; opacity: 0.75; }
+.stats-segments {
+  display: flex;
+  height: 6px;
+  border-radius: 999px;
+  overflow: hidden;
+  margin-top: 0.4rem;
+  background: rgba(255,255,255,0.08);
+}
+
+/* ------------------------------------------------ */
+
+.app { min-height: 100vh; }
+
+.layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto auto auto;
+}
+
+.app-header {
+  grid-column: 1;
+  grid-row: 1;
+  text-align: center;
+  padding: 1.2rem 1rem 0.6rem;
+  position: relative;
+}
+.app-header h1 {
+  font-size: 1.6rem;
+  background: linear-gradient(90deg, #FF9933, #F5F5F0, #138808);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.app-header p { font-size: 0.85rem; opacity: 0.7; margin-top: 0.2rem; }
+
+.theme-toggle {
+  position: absolute;
+  top: 1rem; right: 1rem;
+  background: rgba(255,255,255,0.1);
+  border: none; border-radius: 999px;
+  width: 36px; height: 36px; font-size: 1rem; cursor: pointer;
+}
+
+.tree-panel {
+  grid-column: 1;
+  grid-row: 2;
+  position: relative;
+  height: 50vh;      /* mobile: tree takes the middle */
+  width: 100%;
+}
+
+.form-section {
+  grid-column: 1;
+  grid-row: 3;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  max-width: 480px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.search-bar { display: flex; gap: 0.4rem; align-items: center; justify-content: center; }
+.panel { margin: 0; width: 100%; }   /* was margin: -3rem auto 1.5rem — remove the negative overlap hack */
+.leaf-card { text-align: center; }
+.stats-bar { padding: 0.4rem 0 1rem; }
+
+/* --- Desktop: left column (header+form), right column (tree) --- */
+@media (min-width: 900px) {
+  .layout {
+    grid-template-columns: 440px 1fr;
+    grid-template-rows: auto 1fr;
+    height: 100vh;
+  }
+  .app-header { grid-column: 1; grid-row: 1; text-align: left; padding: 2rem 2rem 0; }
+  .form-section {
+    grid-column: 1;
+    grid-row: 2;
+    padding: 1.5rem 2rem 2rem;
+    overflow-y: auto;
+    margin: 0;
+    max-width: none;
+  }
+  .tree-panel {
+    grid-column: 2;
+    grid-row: 1 / span 2;   /* tree spans full right-side height */
+    height: 100%;
+  }
+  .search-bar { justify-content: flex-start; }
+}
