@@ -92,7 +92,8 @@ function Leaves({ leaves, highlightId, onLeafClick }) {
   return (
     <>
       {Object.entries(groups).map(([color, group]) => (
-        <Instances key={color} limit={Math.max(group.length, 1)}>
+        // <Instances key={color} limit={Math.max(group.length, 1)}>
+        <Instances key={color} limit={5000}>
           <icosahedronGeometry args={[0.16, 0]} />
           <meshStandardMaterial
             color={COLOR_MAP[color]}
